@@ -1,0 +1,7 @@
+# NPM files
+package-lock.json
+node_modules/
+
+# Config files
+config.json
+rules.json

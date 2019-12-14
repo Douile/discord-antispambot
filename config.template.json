@@ -1,0 +1,7 @@
+{
+  "token": "DISCORD_API_BOT_TOKEN",
+  "moderator_flag": "KICK_MEMBERS",
+  "rule_time": 24,
+  "rule_user_time": 48,
+  "rule_file": "./rules.json"
+}
