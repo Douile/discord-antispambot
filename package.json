@@ -3,10 +3,27 @@
   "version": "1.0.0",
   "description": "Allow moderators to ban lots of new accounts with name filtering",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "npm run lint",
+    "lint": "npx eslint src *.js"
+  },
   "author": "Douile",
   "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Douile/discord-antispambot.git"
+  },
+  "homepage": "https://github.com/Douile/discord-antispambot",
+  "bugs": {
+    "url": "https://github.com/Douile/discord-antispambot/issues"
+  },
   "dependencies": {
     "discord.js": "^11.5.1"
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.13.0"
   }
 }
