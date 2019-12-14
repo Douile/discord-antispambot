@@ -37,7 +37,7 @@ const enforceRule = async function(rule) {
       return guild.ban(member, {reason: 'Spambot'}).then(resolve).catch(reject);
     })
   });
-  let res = await allSettled(promises); /* Wait for all bans to finish */
+  await allSettled(promises); /* Wait for all bans to finish */
   return promises.length;
 }
 
@@ -72,7 +72,7 @@ const commands = { /* Subcommands of main command !spamban */
     let time = RULE_USER_TIME;
     for (let i=1;i<params.length;i++) {
       if (params[i-1].toLowerCase() === '-time') {
-        time = parseInt(parts[i]);
+        time = parseInt(params[i]);
         if (isNaN(time)) time = RULE_USER_TIME;
         params.splice(i-1, i);
       }
@@ -90,7 +90,7 @@ const commands = { /* Subcommands of main command !spamban */
     let banned = await enforceRule(rule);
     await response.edit(`Banned ${banned} users matching \`/${regex}/i\` who were created in the past ${time} hours\nRule active for ${RULE_TIME} hours`);
   },
-  'list': async function(message, params) {
+  'list': async function(message) {
     let embed = new discord.RichEmbed({ title: `${activeRules.length} Active spam rules` });
     for (let rule of activeRules) {
       embed.addField('_ _', `\`${rule.regex}\`\nCreated by <@!${rule.creator}>\nExpires: ${new Date(rule.created+rule.time).toUTCString()}`, false);
