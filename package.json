@@ -1,6 +1,6 @@
 {
   "name": "discord-antispambot",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Allow moderators to ban lots of new accounts with name filtering",
   "main": "index.js",
   "scripts": {
