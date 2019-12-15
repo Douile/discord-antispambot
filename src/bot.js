@@ -93,7 +93,7 @@ const commands = { /* Subcommands of main command !spamban */
   'list': async function(message) {
     let embed = new discord.RichEmbed({ title: `${activeRules.length} Active spam rules` });
     for (let rule of activeRules) {
-      embed.addField('_ _', `\`${rule.regex}\`\nCreated by <@!${rule.creator}>\nExpires: ${new Date(rule.created+rule.time).toUTCString()}`, false);
+      embed.addField('_ _', `\`${rule.regex}\`\nFor users created after: ${new Date(rule.created-rule.time).toUTCString()}\nCreated by: <@!${rule.creator}>\nExpires: ${new Date(rule.created+RULE_TIME*HOUR).toUTCString()}`, false);
     }
     await message.channel.send(embed);
   },
