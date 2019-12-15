@@ -67,6 +67,10 @@ const loadRules = async function() {
   }
 }
 
+const addRuleField = function(embed, rule) {
+  embed.addField(`#${rule.created}`, `Rule: \`/${rule.regex}/i\`\nFor users created after: ${new Date(rule.created-rule.time).toUTCString()}\nCreated by: <@!${rule.creator}>\nExpires: ${new Date(rule.created+RULE_TIME*HOUR).toUTCString()}`, false);
+}
+
 const commands = { /* Subcommands of main command !spamban */
   'new': async function(message, params) {
     let time = RULE_USER_TIME;
@@ -91,10 +95,29 @@ const commands = { /* Subcommands of main command !spamban */
     let banned = await enforceRule(rule);
     await response.edit(`Banned ${banned} users matching \`/${regex}/i\` who were created in the past ${time} hours\nRule active for ${RULE_TIME} hours`);
   },
+  'delete': async function(message, params) {
+    let time = parseInt(params[0]);
+    if (isNaN(time)) return await message.channel.send(`${time} is not a valid number`);
+    let deleted = [];
+    activeRules = activeRules.filter((rule) => {
+      if (rule.created === time) {
+        deleted.push(rule);
+        return false;
+      }
+      return true;
+    });
+    await saveRules();
+    let embed = new discord.RichEmbed({ title: `Deleted ${deleted.length} rule(s)`});
+    if (deleted.length === 0) embed.setDescription(`No rules matched ID ${time}`);
+    for (let rule of deleted) {
+      addRuleField(embed, rule);
+    }
+    return await message.channel.send(embed);
+  },
   'list': async function(message) {
     let embed = new discord.RichEmbed({ title: `${activeRules.length} Active spam rules` });
     for (let rule of activeRules) {
-      embed.addField('_ _', `\`${rule.regex}\`\nFor users created after: ${new Date(rule.created-rule.time).toUTCString()}\nCreated by: <@!${rule.creator}>\nExpires: ${new Date(rule.created+RULE_TIME*HOUR).toUTCString()}`, false);
+      addRuleField(embed, rule);
     }
     await message.channel.send(embed);
   },
