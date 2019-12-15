@@ -96,7 +96,8 @@ const commands = { /* Subcommands of main command !spamban */
     await response.edit(`Banned ${banned} users matching \`/${regex}/i\` who were created in the past ${time} hours\nRule active for ${RULE_TIME} hours`);
   },
   'delete': async function(message, params) {
-    let time = parseInt(params[0]);
+    let a = params[0],
+    time = parseInt(a.startsWith('#') ? a.substr(1) : a);
     if (isNaN(time)) return await message.channel.send(`${time} is not a valid number`);
     let deleted = [];
     activeRules = activeRules.filter((rule) => {
