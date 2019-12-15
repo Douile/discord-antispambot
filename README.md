@@ -35,3 +35,4 @@ This command is what is run by the `start.sh` and `start.bat` scripts but you ca
 | `!spamban new [-time TIME] {RULE}` | Create a new ban rule. `TIME` - optional number specifying how new the users account can be (hours). `RULE` - required regex rule matched against the name |
 | `!spamban help [COMMAND]` | Get help with a command |
 | `!spamban list` | List all active rules |
+| `!spamban delete {RULEID}` | Delete a rule where the `RULEID` is the `#number` outputted by the list command |
