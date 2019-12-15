@@ -21,7 +21,7 @@ inactiveRules = new Array();
 const ruleFilter = (rule) => {
   return function(member) {
     let reg = new RegExp(rule.regex, 'i');
-    return ( (member.nickname ? member.nickname : '').match(reg) !== null || member.user.username.match(reg) !== null) && member.user.createdTimestamp >= rule.created-rule.time*HOUR;
+    return ( (member.nickname ? member.nickname : '').match(reg) !== null || member.user.username.match(reg) !== null) && member.user.createdTimestamp >= rule.created-rule.time;
   }
 }
 
