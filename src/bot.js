@@ -78,7 +78,7 @@ const commands = { /* Subcommands of main command !spamban */
       if (params[i-1].toLowerCase() === '-time') {
         time = parseInt(params[i]);
         if (isNaN(time)) time = RULE_USER_TIME;
-        params.splice(i-1, i);
+        params.splice(i-1, 2);
       }
     }
     let regex = params.join(' ').trim();
