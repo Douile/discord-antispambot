@@ -26,3 +26,12 @@ For moderator flags see [discord.js docs](https://discord.js.org/#/docs/main/sta
 To run using node use `node ./index.js`
 
 This command is what is run by the `start.sh` and `start.bat` scripts but you can use these if you prefer.
+
+## Usage
+
+### Commands
+| Command | Description |
+| ------- | ----------- |
+| `!spamban new [-time TIME] {RULE}` | Create a new ban rule. `TIME` - optional number specifying how new the users account can be (hours). `RULE` - required regex rule matched against the name |
+| `!spamban help [COMMAND]` | Get help with a command |
+| `!spamban list` | List all active rules |
