@@ -77,7 +77,8 @@ const commands = { /* Subcommands of main command !spamban */
         params.splice(i-1, i);
       }
     }
-    let regex = params.join(' ');
+    let regex = params.join(' ').trim();
+    if (regex.length === 0) return await message.channel.send('You must provide a name rule');
     let response = await message.channel.send(`Banning all users matching \`/${regex}/i\` who were created in the past ${time} hours`);
 
     let rule = {
