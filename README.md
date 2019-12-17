@@ -30,9 +30,10 @@ This command is what is run by the `start.sh` and `start.bat` scripts but you ca
 ## Usage
 
 ### Commands
-| Command | Description |
-| ------- | ----------- |
-| `!spamban new [-time TIME] {RULE}` | Create a new ban rule. `TIME` - optional number specifying how new the users account can be (hours). `RULE` - required regex rule matched against the name |
-| `!spamban help [COMMAND]` | Get help with a command |
-| `!spamban list` | List all active rules |
-| `!spamban delete {RULEID}` | Delete a rule where the `RULEID` is the `#number` outputted by the list command |
+| Command | Description | Example |
+| ------- | ----------- | ------- |
+| `!spamban new [-time TIME] [-length LENGTH] {RULE}` | Create a new ban rule. `TIME` - optional number specifying how new the users account can be (hours). `LENGTH` - optional number specifying how long a rule should be active (hours). `RULE` - required regex rule matched against the name | `!spamban new Spambots!` or `!spamban -time 72 -length 48 ^bot$` |
+| `!spamban help [COMMAND]...` | Get help with a command | `!spamban help search` |
+| `!spamban list` | List all active rules | `!spamban list` |
+| `!spamban delete {RULEID}` | Delete a rule where the `RULEID` is the `#number` outputted by the list command | `!spamban delete #1576615175279` |
+| `!spamban search {TERM}...` | Search all rules that haven't been deleted | `!spamban search #1576617418461` or `!spamban search @Tom` or `!spamban search #1576617418461 @Tom @Dave #1576615175279` |
