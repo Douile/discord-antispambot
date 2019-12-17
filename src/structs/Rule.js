@@ -1,6 +1,7 @@
 'use strict';
 
 const { allSettled } = require('../util.js');
+const { banReason } = require('../messages.js');
 
 const filter = function(rule) {
   return function(member) {

@@ -17,12 +17,7 @@ class RuleContainer extends Map {
     }
   }
   *active() {
-    let time = new Date().getTime(),
-    i=this._active.length-1,
-    count = 0,
-    active = this._active,
-    map = this;
-
+    let time = new Date().getTime();
 
     for (let i=this._active.length-1;i>=0;i--) {
       let key = this._active[i];

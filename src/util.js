@@ -27,7 +27,7 @@ exports.allSettled = function(promises) {
 }
 
 exports.parseUserMention = function(text) {
-  let match = text.match(/\<\@!?([0-9]+)\>/);
+  let match = text.match(/<@!?([0-9]+)>/);
   if (match === null) return;
   return match[1];
 }

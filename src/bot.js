@@ -52,7 +52,7 @@ const commands = { /* Subcommands of main command !spamban */
   'delete': async function(message, params) {
     let a = params[0],
     id = Rule.parseID(a);
-    if (isNaN(time)) return await message.channel.send(`${id} is not a valid number`);
+    if (isNaN(id)) return await message.channel.send(`${id} is not a valid number`);
     let deleted = [];
     if (RULES.has(id)) {
       deleted.push(RULES.get(id));
@@ -130,7 +130,7 @@ client.on('message', async function (message) {
 client.on('guildMemberAdd', async function(member) {
   /* Filter joining members */
   for (let rule of RULES.active()) {
-    if (ruleFilter(rule)(member)) { /* If member matches active rule ban them */
+    if (Rule.filter(rule)(member)) { /* If member matches active rule ban them */
       /* At this point we return because we don't need to ban a user multiple times */
       return await member.guild.ban(member, {reason: banReason(rule)});
     }
