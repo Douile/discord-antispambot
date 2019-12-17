@@ -1,3 +1,5 @@
+'use strict';
+
 const fs = require('fs');
 
 exports.writeJSON = function(object, file) {

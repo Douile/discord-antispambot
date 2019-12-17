@@ -1,3 +1,5 @@
+'use strict';
+
 /* Join iterators into a single iterator */
 module.exports.concatIterators = function *() {
   for (let iter of arguments) {

@@ -1,3 +1,5 @@
+'use strict';
+
 const HELP_MESSAGES = {
   'new': 'Create a new spamban rule `new [-time TIME] {RULE}`\nTIME - an optional argument specifying the time restriction for when accounts where created\nRULE - A regex rule for the name or nickname of accounts (for help see <https://regexr.com>)',
   'delete': 'Delete a rule `delete {RULEID}`\nRULEID - The ID outputted by the list command (time rule was created in unix)',
