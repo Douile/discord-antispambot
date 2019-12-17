@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 
-exports.writeJSON = function(object, file) {
+exports.writeJSON = function(file, object) {
   return new Promise((resolve,reject) => {
     let text;
     try {

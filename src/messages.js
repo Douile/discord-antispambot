@@ -13,3 +13,7 @@ exports.getHelpMessage = function(command) {
   }
   return 'COULD_NOT_FIND_HELP_MESSAGE';
 }
+
+exports.banReason = function(rule) {
+  return `Spambot rule #${rule.created}`;
+}

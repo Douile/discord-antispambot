@@ -1,7 +1,7 @@
 'use strict';
 
 /* Join iterators into a single iterator */
-module.exports.concatIterators = function *() {
+exports.concatIterators = function *() {
   for (let iter of arguments) {
     for (let v of iter) {
       yield v;
@@ -10,7 +10,7 @@ module.exports.concatIterators = function *() {
 }
 
 /* Polyfill for Promise.allSettled as it is not supported until Node v12.9.0 */
-module.exports.allSettled = function(promises) {
+exports.allSettled = function(promises) {
   var count = 0, size = promises.length, responses = new Array(size);
   return new Promise((resolve) => {
     for (let i=0;i<size;i++) {
@@ -24,4 +24,10 @@ module.exports.allSettled = function(promises) {
       promises[i].then(onFufilled).catch(onFufilled);
     }
   });
+}
+
+exports.parseUserMention = function(text) {
+  let match = text.match(/\<\@!?([0-9]+)\>/);
+  if (match === null) return;
+  return match[1];
 }
