@@ -3,6 +3,7 @@
 const discord = require('discord.js');
 const Rule = require('./structs/Rule.js');
 const RuleContainer = require('./structs/RuleContainer.js');
+const PagedEmbed = require('./structs/PagedEmbed.js');
 const { parseUserMention } = require('./util.js');
 const { getHelpMessage, banReason } = require('./messages.js');
 const client = new discord.Client({ fetchAllMembers: true, disabledEvents: [ 'TYPING_START', 'VOICE_STATE_UPDATE', 'WEBHOOKS_UPDATE', 'VOICE_SERVER_UPDATE', 'CHANNEL_PINS_UPDATE' ] });
@@ -58,15 +59,15 @@ const commands = { /* Subcommands of main command !spamban */
       RULES.delete(id);
       await RULES.save();
     }
-    let embed = new discord.RichEmbed({ title: `Deleted ${deleted.length} rule(s)`});
+    let embed = new PagedEmbed({ title: `Deleted ${deleted.length} rule(s)`});
     if (deleted.length === 0) embed.setDescription(`No rules matched ID ${id}`);
     for (let rule of deleted) {
       Rule.addEmbedField(rule, embed);
     }
-    return await message.channel.send(embed);
+    return await embed.send(message.channel);
   },
   'search': async function(message, params) {
-    let embed = new discord.RichEmbed({ title: 'Matching rules' });
+    let embed = new PagedEmbed({ title: 'Matching rules' });
     for (let p of params) {
       let id;
 
@@ -89,19 +90,19 @@ const commands = { /* Subcommands of main command !spamban */
 
       embed.addField('_ _', `Could not identify search term ${p}`, false);
     }
-    return await message.channel.send(embed);
+    return await embed.send(message.channel);
   },
   'list': async function(message) {
-    let embed = new discord.RichEmbed();
+    let embed = new PagedEmbed();
     for (let rule of RULES.active()) {
       Rule.addEmbedField(rule, embed);
     }
     /* Set title after as active iterator removes rules that become inactive */
     embed.setTitle(`${RULES._active.length} Active spam rules`);
-    await message.channel.send(embed);
+    return await embed.send(message.channel);
   },
   'help': async function(message, params) {
-    let embed = new discord.RichEmbed({ title: 'Antispam help' });
+    let embed = new PagedEmbed({ title: 'Antispam help' });
     let done = false;
     for (let i=0;i<params.length;i++) {
       if (params[i] in commands) {
@@ -112,7 +113,7 @@ const commands = { /* Subcommands of main command !spamban */
       }
     }
     if (!done) embed.addField('Commands', Object.getOwnPropertyNames(commands).map(v => ` • \`${v}\``).join('\n'), false);
-    await message.channel.send(embed);
+    return await embed.send(message.channel);
   }
 }
 
