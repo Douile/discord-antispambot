@@ -13,13 +13,15 @@ All configuration options should be set in a file called `config.json`, you can 
 For moderator flags see [discord.js docs](https://discord.js.org/#/docs/main/stable/class/Permissions?scrollTo=s-FLAGS)
 
 ### Defaults
-| Config option | value |
-| ------------ | ----- |
-| moderator_flag | `MANAGE_MESSAGES` |
-| prefix | `!` |
-| rule_time | `24` |
-| rule_user_time | `24` |
-| rule_file | `./rules.json` |
+| Config option | value | Comments |
+| ------------- | ----- | -------- |
+| moderator_flag | `MANAGE_MESSAGES` | |
+| prefix | `!` | Prefix before `spambot`|
+| rule_time | `24` | |
+| rule_user_time | `24` | |
+| rule_file | `./rules.json` | |
+| auto_rule_rate | `60000` | Time limit between each user with the same joining for auto rules |
+| auto_rule_count | `4` | Number of users that must match an auto rule before it is enforced |
 
 
 ## Running
