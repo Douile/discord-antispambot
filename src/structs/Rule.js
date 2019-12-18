@@ -11,11 +11,13 @@ const filter = function(rule) {
 }
 
 const enforce = async function(rule, container) {
+  if (!valid(rule) || typeof rule.guild !== 'object') throw new TypeError('Please provide a valid rule to enforce');
   /* Add to member join handler */
   container.addRule(rule);
   await container.save();
   /* Filter current members */
   const guild = rule.guild;
+  if (!guild.members) return console.warn('Rule enforcer encountered a memberless guild');
   let members = guild.members.filter(filter(rule));
   let promises = members.map((member) => {
     return new Promise((resolve, reject) => {

@@ -3,8 +3,9 @@
 const discord = require('discord.js');
 const Rule = require('./structs/Rule.js');
 const RuleContainer = require('./structs/RuleContainer.js');
+const AutoRuleContainer = require('./structs/AutoRuleContainer.js');
 const PagedEmbed = require('./structs/PagedEmbed.js');
-const { parseUserMention } = require('./util.js');
+const { parseUserMention, regexEscape } = require('./util.js');
 const { getHelpMessage, banReason } = require('./messages.js');
 const client = new discord.Client({ fetchAllMembers: true, disabledEvents: [ 'TYPING_START', 'VOICE_STATE_UPDATE', 'WEBHOOKS_UPDATE', 'VOICE_SERVER_UPDATE', 'CHANNEL_PINS_UPDATE' ] });
 
@@ -14,10 +15,13 @@ var PREFIX = '!';
 var RULE_TIME = 24;
 var RULE_USER_TIME = 24;
 var RULE_FILE = './rules.json';
+var AUTO_RULE_RATE = 60000; // 1 Minute
+var AUTO_RULE_COUNT = 4;
 
 const HOUR = 1000*60*60;
 
 var RULES;
+var AUTORULES = new AutoRuleContainer();
 
 const commands = { /* Subcommands of main command !spamban */
   'new': async function(message, params) {
@@ -128,13 +132,39 @@ client.on('message', async function (message) {
 })
 
 client.on('guildMemberAdd', async function(member) {
-  /* Filter joining members */
+  /* Apply user created filters */
   for (let rule of RULES.active()) {
     if (Rule.filter(rule)(member)) { /* If member matches active rule ban them */
       /* At this point we return because we don't need to ban a user multiple times */
       return await member.guild.ban(member, {reason: banReason(rule)});
     }
   }
+  /* Auto detect users with same name */
+  for (let rule of AUTORULES.all()) {
+    if(Rule.filter(rule)(member)) {
+      rule.count += 1;
+      rule.created = new Date().getTime();
+      if (rule.count >= AUTO_RULE_COUNT) {
+        delete rule.count; // By deleting rule.count the next time generator is run this rule is deleted
+        rule.length = RULE_TIME*HOUR;
+        console.log(`Auto ban detection :: /${rule.regex}/i`);
+        await Rule.enforce(rule, RULES);
+      }
+      return; // WARNING: Memory leak could be caused here if lots of matches occur as AUTORULES generator never reachs start of array to delete oldest auto rules
+    }
+  }
+
+  /* User matched no active rules or auto rules so create new autorule */
+  let rule = {
+    guild: member.guild,
+    creator: client.user.id,
+    length: AUTO_RULE_RATE,
+    regex: `^${regexEscape(member.user.username)}$`,
+    created: new Date().getTime(),
+    time: RULE_USER_TIME*HOUR,
+    count: 1
+  };
+  AUTORULES.push(rule);
 })
 
 client.on('ready', async function() {
@@ -157,6 +187,8 @@ module.exports = function(opts) {
   PREFIX = opts.prefix ? opts.prefix : PREFIX;
   RULE_TIME = opts.rule_time ? opts.rule_time : RULE_TIME;
   RULE_USER_TIME = opts.rule_user_time ? opts.rule_user_time : RULE_USER_TIME;
+  AUTO_RULE_RATE = opts.auto_rule_rate ? opts.auto_rule_rate : AUTO_RULE_RATE;
+  AUTO_RULE_COUNT = opts.auto_rule_count ? opts.auto_rule_count : AUTO_RULE_COUNT;
 
   client.login(TOKEN).then(null).catch(console.error);
 }

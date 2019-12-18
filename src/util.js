@@ -31,3 +31,10 @@ exports.parseUserMention = function(text) {
   if (match === null) return;
   return match[1];
 }
+
+/* Escape all regex special characters */
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Using_special_characters
+exports.regexEscape = function(string) {
+  if (typeof string !== 'string') throw new TypeError('Argument must be a string');
+  return string.replace(/([[\]\\^$.|?*+(){}])/g, '\\$1');
+}
