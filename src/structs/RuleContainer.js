@@ -12,12 +12,12 @@ class RuleContainer extends Map {
   addRule(rule) {
     if (!valid(rule)) return;
     this.set(rule.created, rule);
-    if (rule.created+rule.length >= new Date().getTime()) {
+    if (rule.created+rule.length >= Date.now()) {
       this._active.push(rule.created);
     }
   }
   *active() {
-    let time = new Date().getTime();
+    let time = Date.now();
 
     for (let i=this._active.length-1;i>=0;i--) {
       let key = this._active[i];

@@ -47,7 +47,7 @@ const commands = { /* Subcommands of main command !spamban */
       creator: message.author.id,
       length: length*HOUR,
       regex: regex,
-      created: new Date().getTime(),
+      created: Date.now(),
       time: time*HOUR
     };
     let banned = await Rule.enforce(rule, RULES);
@@ -143,7 +143,7 @@ client.on('guildMemberAdd', async function(member) {
   for (let rule of AUTORULES.all()) {
     if(Rule.filter(rule)(member)) {
       rule.count += 1;
-      rule.created = new Date().getTime();
+      rule.created = Date.now();
       if (rule.count >= AUTO_RULE_COUNT) {
         delete rule.count; // By deleting rule.count the next time generator is run this rule is deleted
         rule.length = RULE_TIME*HOUR;
@@ -160,7 +160,7 @@ client.on('guildMemberAdd', async function(member) {
     creator: client.user.id,
     length: AUTO_RULE_RATE,
     regex: `^${regexEscape(member.user.username)}$`,
-    created: new Date().getTime(),
+    created: Date.now(),
     time: RULE_USER_TIME*HOUR,
     count: 1
   };
