@@ -56,8 +56,9 @@ class RuleContainer extends Map {
   async save(file) {
     if (!file) file = this._file;
     let values = Array.from(this.values()).map((v) => {
-      v.guild = v.guild.id;
-      return v;
+      let data = Object.assign({}, v);
+      data.guild = data.guild.id;
+      return data;
     });
     await writeJSON(file, values);
   }
