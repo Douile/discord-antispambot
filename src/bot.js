@@ -53,17 +53,25 @@ const commands = { /* Subcommands of main command !spamban */
     await response.edit(new discord.RichEmbed({title: `Created ban rule #${rule.id}`, description: `Banned ${banned} users matching \`/${regex}/i\` who were created in the past ${time} hours\nRule active for ${length} hours`}));
   },
   'delete': async function(message, params) {
-    let a = params[0],
-    id = Rule.parseID(a);
-    if (id === undefined) return await message.channel.send(`${id} is not a valid ID`);
+    let embed = new PagedEmbed();
     let deleted = [];
-    if (RULES.has(id)) {
-      deleted.push(RULES.get(id));
-      RULES.delete(id);
-      await RULES.save();
+    for (let param of params) {
+      let id = Rule.parseID(param);
+      if (id === undefined) {
+        embed.addField('Error', `${param} is not a valid ID`, false);
+        continue;
+      }
+
+      if (RULES.has(id)) {
+        deleted.push(RULES.get(id));
+        RULES.delete(id);
+      } else {
+        embed.addField('Error', `No rules matched ID #${id}`, false);
+      }
     }
-    let embed = new PagedEmbed({ title: `Deleted ${deleted.length} rule(s)`});
-    if (deleted.length === 0) embed.setDescription(`No rules matched ID ${id}`);
+
+    if (deleted.length > 0) await RULES.save();
+    embed.setTitle(`Deleted ${deleted.length} rule(s)`);
     for (let rule of deleted) {
       Rule.addEmbedField(rule, embed);
     }

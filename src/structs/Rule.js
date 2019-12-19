@@ -44,9 +44,10 @@ const valid = function(rule) {
     (typeof rule.id === 'string');
 }
 
+const REG_ID = /^#?([0-9]+)$/;
 const parseID = function(text) {
-  let n = parseInt(text.startsWith('#') ? text.substr(1) : text);
-  return isNaN(n) ? undefined : n.toString();
+  let match = text.match(REG_ID);
+  return match === null ? undefined : match[1];
 }
 
 const create = function(data) {
