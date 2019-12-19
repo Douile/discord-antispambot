@@ -11,9 +11,9 @@ class RuleContainer extends Map {
   }
   addRule(rule) {
     if (!valid(rule)) return;
-    this.set(rule.created, rule);
+    this.set(rule.id, rule);
     if (rule.created+rule.length >= Date.now()) {
-      this._active.push(rule.created);
+      this._active.push(rule.id);
     }
   }
   *active() {
@@ -43,6 +43,8 @@ class RuleContainer extends Map {
       for (let rule of rules) {
         /* Old rules don't have a length so set to one hour */
         if (typeof rule.length === 'undefined') rule.length = 1440000;
+        /* Old rules don't have ID so use creation time */
+        if (typeof rule.id === 'undefined') rule.id = rule.created.toString();
         if (!valid(rule)) continue;
 
         rule.guild = guilds.get(rule.guild);

@@ -2,6 +2,7 @@
 
 const { allSettled } = require('../util.js');
 const { banReason } = require('../messages.js');
+const { SnowflakeUtil } = require('discord.js');
 
 const filter = function(rule) {
   return function(member) {
@@ -30,7 +31,7 @@ const enforce = async function(rule, container) {
 }
 
 const addEmbedField = function(rule, embed) {
-  embed.addField(`#${rule.created}`, `Rule: \`/${rule.regex}/i\`\nFor users created after: ${new Date(rule.created-rule.time).toUTCString()}\nCreated by: <@!${rule.creator}>\nExpires: ${new Date(rule.created+rule.length).toUTCString()}`, false);
+  embed.addField(`#${rule.id}`, `Rule: \`/${rule.regex}/i\`\nFor users created after: ${new Date(rule.created-rule.time).toUTCString()}\nCreated by: <@!${rule.creator}>\nExpires: ${new Date(rule.created+rule.length).toUTCString()}`, false);
 }
 
 const valid = function(rule) {
@@ -39,11 +40,19 @@ const valid = function(rule) {
     (typeof rule.length === 'number') &&
     (typeof rule.regex === 'string') &&
     (typeof rule.created === 'number') &&
-    (typeof rule.time === 'number');
+    (typeof rule.time === 'number') &&
+    (typeof rule.id === 'string');
 }
 
 const parseID = function(text) {
-  return parseInt(text.startsWith('#') ? text.substr(1) : text);
+  let n = parseInt(text.startsWith('#') ? text.substr(1) : text);
+  return isNaN(n) ? undefined : n.toString();
+}
+
+const create = function(data) {
+  data.created = Date.now();
+  data.id = SnowflakeUtil.generate();
+  return data;
 }
 
 exports.filter = filter;
@@ -51,3 +60,4 @@ exports.enforce = enforce;
 exports.addEmbedField = addEmbedField;
 exports.valid = valid;
 exports.parseID = parseID;
+exports.create = create;

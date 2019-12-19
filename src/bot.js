@@ -42,21 +42,20 @@ const commands = { /* Subcommands of main command !spamban */
     if (regex.length === 0) return await message.channel.send(new discord.RichEmbed({title: 'Error', description: 'You must provide a name rule'}));
     let response = await message.channel.send(new discord.RichEmbed({title: 'Creating ban rule', description: `Banning all users matching \`/${regex}/i\` who were created in the past ${time} hours`}));
 
-    let rule = {
+    let rule = Rule.create({
       guild: message.guild,
       creator: message.author.id,
       length: length*HOUR,
       regex: regex,
-      created: Date.now(),
       time: time*HOUR
-    };
+    });
     let banned = await Rule.enforce(rule, RULES);
-    await response.edit(new discord.RichEmbed({title: `Created ban rule #${rule.created}`, description: `Banned ${banned} users matching \`/${regex}/i\` who were created in the past ${time} hours\nRule active for ${length} hours`}));
+    await response.edit(new discord.RichEmbed({title: `Created ban rule #${rule.id}`, description: `Banned ${banned} users matching \`/${regex}/i\` who were created in the past ${time} hours\nRule active for ${length} hours`}));
   },
   'delete': async function(message, params) {
     let a = params[0],
     id = Rule.parseID(a);
-    if (isNaN(id)) return await message.channel.send(`${id} is not a valid number`);
+    if (id === undefined) return await message.channel.send(`${id} is not a valid ID`);
     let deleted = [];
     if (RULES.has(id)) {
       deleted.push(RULES.get(id));
@@ -76,7 +75,7 @@ const commands = { /* Subcommands of main command !spamban */
       let id;
 
       id = Rule.parseID(p);
-      if (!isNaN(id)) {
+      if (id !== undefined) {
         if (RULES.has(id)) Rule.addEmbedField(RULES.get(id), embed);
         else embed.addField('_ _', `No rule with ID #\`${id}\` exists`, false);
         continue;
@@ -164,15 +163,14 @@ client.on('guildMemberAdd', async function(member) {
   }
 
   /* User matched no active rules or auto rules so create new autorule */
-  let rule = {
+  let rule = Rule.create({
     guild: member.guild,
     creator: client.user.id,
     length: AUTO_RULE_RATE,
     regex: `^${regexEscape(member.user.username)}$`,
-    created: Date.now(),
     time: RULE_USER_TIME*HOUR,
     count: 1
-  };
+  });
   AUTORULES.push(rule);
 })
 
