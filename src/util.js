@@ -38,3 +38,19 @@ exports.regexEscape = function(string) {
   if (typeof string !== 'string') throw new TypeError('Argument must be a string');
   return string.replace(/([[\]\\^$.|?*+(){}])/g, '\\$1');
 }
+
+exports.timeString = function(time) {
+  if (typeof time !== 'number' || isNaN(time) || time <= 0) throw new Error(`Invalid time ${time}`);
+  let divisors = [24*60*60*1000, 60*60*1000, 60*1000, 1000, 1];
+  let prefixes = ['days', 'hours', 'mins', 'secs', 'msecs'];
+  let output = [];
+
+  for (let i=0;i<divisors.length;i++) {
+    let part = Math.floor(time/divisors[i]);
+    if (part > 0) {
+      output.push(part.toString()+prefixes[i]);
+      time = time % divisors[i];
+    }
+  }
+  return output.join(' ');
+}

@@ -5,7 +5,7 @@ const Rule = require('./structs/Rule.js');
 const RuleContainer = require('./structs/RuleContainer.js');
 const AutoRuleContainer = require('./structs/AutoRuleContainer.js');
 const PagedEmbed = require('./structs/PagedEmbed.js');
-const { parseUserMention, regexEscape } = require('./util.js');
+const { parseUserMention, regexEscape, timeString } = require('./util.js');
 const { getHelpMessage, banReason } = require('./messages.js');
 const client = new discord.Client({ fetchAllMembers: true, disabledEvents: [ 'TYPING_START', 'VOICE_STATE_UPDATE', 'WEBHOOKS_UPDATE', 'VOICE_SERVER_UPDATE', 'CHANNEL_PINS_UPDATE' ] });
 
@@ -117,6 +117,15 @@ const commands = { /* Subcommands of main command !spamban */
       }
     }
     if (!done) embed.addField('Commands', Object.getOwnPropertyNames(commands).map(v => ` • \`${v}\``).join('\n'), false);
+    return await embed.send(message.channel);
+  },
+  'info': async function(message) {
+    let embed = new PagedEmbed();
+    let info = require('../package.json');
+    embed.setTitle(`${info.name} info`);
+    embed.addField('Environment', `[${info.name}](${info.homepage}) v${info.version}\nNode v${process.versions.node} (${process.platform}${process.arch})\n[Discord.js](https://discord.js.org) v${discord.version}`);
+    embed.addField('Runtime', `Uptime: ${timeString(client.uptime)}\nPing: ${client.ping}ms`);
+    embed.addField('_ _', 'Created by: <@!293482190031945739>');
     return await embed.send(message.channel);
   }
 }
