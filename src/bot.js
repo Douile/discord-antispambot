@@ -134,9 +134,13 @@ client.on('message', async function (message) {
   if (!message.content.startsWith(`${PREFIX}spamban`)) return; /* Single command bot */
 
   let parts = message.content.split(' ').splice(1); /* Remove !spamban */
-  if (parts.length === 0) return await commands.help(message, parts); /* If no subcommand is specified */
-  if (parts[0].toLowerCase(0) in commands) return await commands[parts[0].toLowerCase()](message, parts.splice(1)); /* If subcommand is specified */
-  return await commands.help(message, parts); /* If subcommand is unknown */
+  try {
+    if (parts.length === 0) return await commands.help(message, parts); /* If no subcommand is specified */
+    if (parts[0].toLowerCase(0) in commands) return await commands[parts[0].toLowerCase()](message, parts.splice(1)); /* If subcommand is specified */
+    return await commands.help(message, parts); /* If subcommand is unknown */
+  } catch(e) {
+    console.error(`Error executing command ${message.content}\n`, e);
+  }
 })
 
 client.on('guildMemberAdd', async function(member) {
