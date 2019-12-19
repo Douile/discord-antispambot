@@ -39,3 +39,4 @@ This command is what is run by the `start.sh` and `start.bat` scripts but you ca
 | `!spamban list` | List all active rules | `!spamban list` |
 | `!spamban delete {RULEID}` | Delete a rule where the `RULEID` is the `#number` outputted by the list command | `!spamban delete #1576615175279` |
 | `!spamban search {TERM}...` | Search all rules that haven't been deleted | `!spamban search #1576617418461` or `!spamban search @Tom` or `!spamban search #1576617418461 @Tom @Dave #1576615175279` |
+| `!spamban info` | Return info about the state of the bot | `!spamban info` | 
