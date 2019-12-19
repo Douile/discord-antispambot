@@ -13,6 +13,7 @@ exports.concatIterators = function *() {
 exports.allSettled = function(promises) {
   var count = 0, size = promises.length, responses = new Array(size);
   return new Promise((resolve) => {
+    if (size === 0) return resolve([]);
     for (let i=0;i<size;i++) {
       let onFufilled = () => {
         let res = Array.from(arguments);
