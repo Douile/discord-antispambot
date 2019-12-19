@@ -39,8 +39,8 @@ const commands = { /* Subcommands of main command !spamban */
       }
     }
     let regex = params.join(' ').trim();
-    if (regex.length === 0) return await message.channel.send('You must provide a name rule');
-    let response = await message.channel.send(`Banning all users matching \`/${regex}/i\` who were created in the past ${time} hours`);
+    if (regex.length === 0) return await message.channel.send(new discord.RichEmbed({title: 'Error', description: 'You must provide a name rule'}));
+    let response = await message.channel.send(new discord.RichEmbed({title: 'Creating ban rule', description: `Banning all users matching \`/${regex}/i\` who were created in the past ${time} hours`}));
 
     let rule = {
       guild: message.guild,
@@ -51,7 +51,7 @@ const commands = { /* Subcommands of main command !spamban */
       time: time*HOUR
     };
     let banned = await Rule.enforce(rule, RULES);
-    await response.edit(`Banned ${banned} users matching \`/${regex}/i\` who were created in the past ${time} hours\nRule active for ${RULE_TIME} hours`);
+    await response.edit(new discord.RichEmbed({title: `Created ban rule #${rule.created}`, description: `Banned ${banned} users matching \`/${regex}/i\` who were created in the past ${time} hours\nRule active for ${length} hours`}));
   },
   'delete': async function(message, params) {
     let a = params[0],
